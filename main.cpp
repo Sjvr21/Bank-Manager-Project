@@ -40,6 +40,7 @@ while(opcion != 'n'){
 
     cout << "Quieres continuar?";
     cin >> opcion;
+    
     system("clear");
 
 
