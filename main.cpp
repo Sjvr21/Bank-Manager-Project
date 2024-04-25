@@ -16,7 +16,7 @@ while(opcion != 'n'){
    char* dateTime = ctime(&now);
 
 
-    ofstream transfers("transactions.txt");
+    ofstream transfers("transactions.txt", ios::app);
     
 
     
@@ -29,15 +29,16 @@ while(opcion != 'n'){
     if(money <= AccMoney){
         
          cout << "Transfer sucessful";
-
+        
         transfers << "You transferred $"<<money<<" to account number: "<<AccNumber<<" on "<<dateTime<<endl;
         transfers.close();
+
     }
      else{
       cout << "Your account doesn't have that money";
 
     }
-
+    cout << endl; 
     cout << "Quieres continuar?";
     cin >> opcion;
     
