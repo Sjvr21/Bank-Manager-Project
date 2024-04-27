@@ -74,7 +74,6 @@ int main(){
     while(opt != 5){
 
 
-        ofstream mon("money.txt");
         
 
 
