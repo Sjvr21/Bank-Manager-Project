@@ -47,8 +47,6 @@ while(opcion != 'n'){
 
     
 }
-<<<<<<< HEAD
-=======
 }
 
 
@@ -144,9 +142,6 @@ int main(){
 
     }
 
->>>>>>> 0d60e68 (menu)
-
-    
 
     return 0;
 }
