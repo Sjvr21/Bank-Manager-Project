@@ -1,11 +1,14 @@
 #include <iostream>
 #include <fstream>
 #include <ctime>
+#include <string>
+
+
 using namespace std;
 
-void EnviarDinero(){
+int EnviarDinero(int AccNumber, int  money, int AccMoney){
 
-    int AccNumber, money, AccMoney = 10000;
+    
 char opcion;
 
 while(opcion != 'n'){
@@ -28,10 +31,10 @@ while(opcion != 'n'){
     if(money <= AccMoney){
         
          cout << "Transfer sucessful";
-        
+        cout << '\a';
         transfers << "You transferred $"<<money<<" to account number: "<<AccNumber<<" on "<<dateTime<<endl;
         transfers.close();
-
+        AccMoney = AccMoney - money;
     }
      else{
       cout << "Your account doesn't have that money";
@@ -43,18 +46,36 @@ while(opcion != 'n'){
     
     system("clear");
 
+    return AccMoney;
 
-    
 }
 }
 
+void AccStatement(){
+    string lista;
+    ifstream statement("transactions.txt");
+
+ cout << "Account Statements: \n";  
+ while (getline(statement, lista)){
+
+    //Output the text from the file 
+    cout << lista<<endl;
+  }
+  
+
+  //Close the file
+  statement.close();
+
+}
 
 int main(){
 
 
 
     string Username, password;
-    int opt,money;
+    int opt;
+    int AccNumber;
+    double AccMoney, money;
 
     //El loop se repetira hasta que el username y password sean los correctos
 
@@ -71,11 +92,9 @@ int main(){
 
     if(Username == "User12" & password == "Password"){
 
+    AccMoney = 188.78;
+
     while(opt != 5){
-
-
-        
-
 
        
     cout << "Welcome "<<Username<<"!\n";   
@@ -91,25 +110,42 @@ int main(){
     {
     case 1:
         //Account balance code
+        cout << "############################\n";
+        cout << "Your balance is : $"<<AccMoney<<endl;
+        cout << "############################\n";
         break;
     
     case 2:
         // Deposit Money Code
+        cout << "Enter the ammount of money you want to deposit: ";
+
+        cin >> money;
+
+        if(money > 0){
+        cout <<endl;
+        AccMoney = AccMoney + money;
+        cout << "Deposit done sucessfuly";
+
+        }
+
         break;
 
     case 3:
-        //Transfer money code
+        EnviarDinero(AccNumber, money, AccMoney);
+        cout << endl;
+        AccMoney = EnviarDinero(AccNumber,money,AccMoney);
         break;
 
     case 4:
-        //View Transder statement code
+
+        AccStatement();
         break;
 
     case 5:
         system("clear");
         cout << "Exiting...";
         break;
-
+        
     default:
 
     system("clear");
