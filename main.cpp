@@ -3,179 +3,183 @@
 #include <ctime>
 #include <string>
 
-
 using namespace std;
 
-int EnviarDinero(int AccNumber, int  money, int AccMoney){
-
-    
-char opcion;
-
-while(opcion != 'n'){
-
-    time_t now = time(0);
+int EnviarDinero(int& AccNumber, double& money, double& AccMoney) {
+    char opcion = 'y';
+    do {
+        time_t now = time(0);
    
-   char* dateTime = ctime(&now);
+        char* dateTime = ctime(&now);
 
-
-    ofstream transfers("transactions.txt", ios::app);
-    
-
-    
-    cout << "Enter the account number: ";
-    cin >> AccNumber;
-
-    cout << "Enter the ammount of money you want to transfer: ";
-    cin >> money;
-
-    if(money <= AccMoney){
-        
-         cout << "Transfer sucessful";
-        cout << '\a';
-        transfers << "You transferred $"<<money<<" to account number: "<<AccNumber<<" on "<<dateTime<<endl;
-        transfers.close();
-        AccMoney = AccMoney - money;
-    }
-     else{
-      cout << "Your account doesn't have that money";
-
-    }
-    cout << endl; 
-    cout << "Quieres continuar?";
-    cin >> opcion;
-    
-    system("clear");
-
-    return AccMoney;
-
-}
-}
-
-void AccStatement(){
-    string lista;
-    ifstream statement("transactions.txt");
-
- cout << "Account Statements: \n";  
- while (getline(statement, lista)){
-
-    //Output the text from the file 
-    cout << lista<<endl;
-  }
-  
-
-  //Close the file
-  statement.close();
-
-}
-
-int main(){
-
-
-
-    string Username, password;
-    int opt;
-    int AccNumber;
-    double AccMoney, money;
-
-    //El loop se repetira hasta que el username y password sean los correctos
-
-    while(Username != "User12" & password != "Password"){
-
-    cout << "Welcome to the Central Bank Account Software"<<endl;
-    cout << "Enter your Username: "; // Username "User12"
-    cin >> Username;
-
-    cout << endl;
-
-    cout << "Enter your password: "; // Password "Password"
-    cin >> password;
-
-    if(Username == "User12" & password == "Password"){
-
-    AccMoney = 188.78;
-
-    while(opt != 5){
-
-       
-    cout << "Welcome "<<Username<<"!\n";   
-    cout << "Select A Option\n";
-    cout <<"1-View Account Balance\n";
-    cout <<"2-Deposit Money\n";
-    cout <<"3-Transfer Money\n";
-    cout <<"4-View Transfer Statements\n";
-    cout <<"5-EXIT\n";
-    cin >> opt;
-    
-    switch (opt)
-    {
-    case 1:
-        //Account balance code
-        cout << "############################\n";
-        cout << "Your balance is : $"<<AccMoney<<endl;
-        cout << "############################\n";
-        break;
-    
-    case 2:
-        // Deposit Money Code
-        cout << "Enter the ammount of money you want to deposit: ";
-
+        ofstream transfers("transactions.txt", ios::app);
+        cout << "Enter the account number: ";
+        cin >> AccNumber;
+        cout << "Enter the amount of money you want to transfer: ";
         cin >> money;
 
-        if(money > 0){
-        cout <<endl;
-        AccMoney = AccMoney + money;
-        cout << "Deposit done sucessfuly";
-
+        if (money <= AccMoney && money > 0) {
+            cout << "Transfer successful\n" << '\a';
+            transfers << "You transferred $" << money << " to account number: " << AccNumber << " on " << dateTime << endl;
+            transfers.close();
+            AccMoney -= money;
+        }
+        else {
+            cout << "Your account doesn't have that money\n";
         }
 
-        break;
+        cout << "Do you want to continue? (y/n): ";
+        cin >> opcion;
+        system("cls");
 
-    case 3:
-        EnviarDinero(AccNumber, money, AccMoney);
-        cout << endl;
-        AccMoney = EnviarDinero(AccNumber,money,AccMoney);
-        break;
+    } while (opcion != 'n');
 
-    case 4:
-
-        AccStatement();
-        break;
-
-    case 5:
-        system("clear");
-        cout << "Exiting...";
-        break;
-        
-    default:
-
-    system("clear");
-    cout << "***********************************************"<<endl;
-    cout << "El numero entrado es incorrecto"<<endl;
-    cout << "Intentalo de nuevo"<<endl;
-    cout << "***********************************************"<<endl;
-        break;
-        
-    }
-
-
-    }
-
-
-
-    } else {
-        
-        //Esto si eres de windows tendrias que cambiarlo a "clr"
-        system("clear");
-        cout << "***********************************************"<<endl;
-        cout << "Username or Password Incorrect"<<endl;
-        cout << "Please Try Again"<<endl;
-        cout << "***********************************************"<<endl;
-
-    }
-
-
-    }
-return 0;
-
+    return AccMoney;
 }
 
+void AccStatement() {
+    ifstream statement("transactions.txt");
+    string line;
+
+    cout << "Account Statements: \n";
+    while (getline(statement, line)) {
+        cout << line << endl;
+    }
+    statement.close();
+}
+
+void cambiarCredenciales(string& Username, string& password) {
+    string currentUsername, currentPassword, newUsername, newPassword;
+
+    cout << "Enter your current username: ";
+    cin >> currentUsername;
+    cout << "Enter your current password: ";
+    cin >> currentPassword;
+
+    
+
+    if (currentUsername == Username && currentPassword == password) {
+        cout << "Enter your new username: ";
+        cin >> newUsername;
+        cout << "Enter your new password: ";
+        cin >> newPassword;
+
+        ofstream NewUser("Username.txt");
+        NewUser << newUsername;
+
+        ofstream NewPass("Password.txt");
+        NewPass << newPassword;
+
+        NewPass.close();
+        NewUser.close();
+
+        Username = newUsername;
+        password = newPassword;
+        cout << "Username and password have been changed successfully.\n";
+    }
+    else {
+        cout << "Incorrect username or password.\n";
+    }
+}
+
+int main() {
+
+
+    string Username, password, defPass = "Password", defUser = "User12";
+    int opt = 0, AccNumber;
+    double AccMoney = 188.78, money;
+    
+    
+
+
+    string Pass;
+    ifstream PasswordFile("Password.txt");
+ while (getline(PasswordFile, Pass)){
+
+    defPass = Pass;
+  }
+  PasswordFile.close();
+
+
+    string User;
+    ifstream UserFile("Username.txt");
+ while (getline(UserFile, User)){
+
+    defUser = User;
+  }
+  UserFile.close();
+
+
+    
+    cout << "Welcome to the Central Bank Account Software" << endl;
+    cout << "Enter your Username: ";
+    cin >> Username;
+
+    cout << "Enter your password: ";
+    cin >> password;
+
+
+    while (Username != defUser || password != defPass) {
+        system("clr");
+        cout << "Username or Password Incorrect\nPlease Try Again" << endl;
+        cout << "Enter your Username: ";
+        cin >> Username;
+        cout << "Enter your password: ";
+        cin >> password;
+
+    }
+
+    do {
+        cout << "Welcome " << Username << "!\n";
+        cout << "Select An Option\n";
+        cout << "1-View Account Balance\n";
+        cout << "2-Deposit Money\n";
+        cout << "3-Transfer Money\n";
+        cout << "4-View Transfer Statements\n";
+        cout << "5-Change Username and Password\n";
+        cout << "6-Exit\n";
+        cin >> opt;
+
+        switch (opt) {
+        case 1:
+            system("clr");
+            cout << "############################\n";
+            cout << "Your balance is: $" << AccMoney << endl;
+            cout << "############################\n";
+            break;
+        case 2:
+            system("clr");
+            cout << "Enter the amount of money you want to deposit: ";
+            cin >> money;
+            if (money > 0) {
+                AccMoney += money;
+                cout << "Deposit done successfully\n";
+            }
+            break;
+        case 3:
+            system("clr");
+            EnviarDinero(AccNumber, money, AccMoney);
+            break;
+        case 4:
+            system("clr");
+            AccStatement();
+            break;
+        case 5:
+            system("clr");
+            cambiarCredenciales(Username, password);
+
+            break;
+        case 6:
+            system("clr");
+            cout << "Exiting...";
+            break;
+        default:
+            system("clr");
+            cout << "Invalid option, please try again.\n";
+            break;
+        }
+    } while (opt != 6);  
+    
+
+    return 0;
+}
