@@ -28,7 +28,7 @@ int EnviarDinero(int& AccNumber, double& money, double& AccMoney) {
             cout << "Your account doesn't have that money\n";
         }
 
-        cout << "Do you want to continue? (y/n): ";
+        cout << "Do you want to make another transfer? (y/n): ";
         cin >> opcion;
         system("cls");
 
@@ -120,7 +120,7 @@ int main() {
 
 
     while (Username != defUser || password != defPass) {
-        system("clr");
+        system("cls");
         cout << "Username or Password Incorrect\nPlease Try Again" << endl;
         cout << "Enter your Username: ";
         cin >> Username;
@@ -142,13 +142,13 @@ int main() {
 
         switch (opt) {
         case 1:
-            system("clr");
+            system("cls");
             cout << "############################\n";
             cout << "Your balance is: $" << AccMoney << endl;
             cout << "############################\n";
             break;
         case 2:
-            system("clr");
+            system("cls");
             cout << "Enter the amount of money you want to deposit: ";
             cin >> money;
             if (money > 0) {
@@ -157,24 +157,24 @@ int main() {
             }
             break;
         case 3:
-            system("clr");
+            system("cls");
             EnviarDinero(AccNumber, money, AccMoney);
             break;
         case 4:
-            system("clr");
+            system("cls");
             AccStatement();
             break;
         case 5:
-            system("clr");
+            system("cls");
             cambiarCredenciales(Username, password);
 
             break;
         case 6:
-            system("clr");
+            system("cls");
             cout << "Exiting...";
             break;
         default:
-            system("clr");
+            system("cls");
             cout << "Invalid option, please try again.\n";
             break;
         }
