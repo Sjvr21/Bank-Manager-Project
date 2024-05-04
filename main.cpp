@@ -7,15 +7,18 @@
 
 using namespace std;
 
-struct Account {
+struct Account {   //Se crea una estructura y le añadimos algunas variables
     int accountNumber;
     string holderName;
     double balance;
 };
 
+//Creamos un vector
 vector<Account> accounts;
 
 void addAccount() {
+
+    //Esta funcion se encarga de crear cuentas nuevas utilizando vectores
     Account newAccount;
     cout << "Enter ner account number: ";
     cin >> newAccount.accountNumber;
@@ -28,6 +31,7 @@ void addAccount() {
     
 }
 
+//Esta funcion se encarga de mostrar la lista de cuentas utilizando vectores
 void listAccounts() {
     cout << "List of All Accounts:\n";
     for (const auto& account : accounts) {
@@ -40,21 +44,23 @@ void listAccounts() {
 
 
 
+//Esta funcion se encarga de realizar una transaccion de dinero y guardar dicho pago 
+// en un archivo de texto con la fecha realizada
 int EnviarDinero(int& AccNumber, double& money, double& AccMoney) {
     char opcion = 'y';
     do {
-        time_t now = time(0);
-   
-        char* dateTime = ctime(&now);
+        //Esto de aqui de conseguit la fecha de el sistema
+        time_t tiempo = time(0);
+        char* dateTime = ctime(&tiempo);
 
-        ofstream transfers("transactions.txt", ios::app);
-        cout << "Enter the account number: ";
+        ofstream transfers("transactions.txt", ios::app);   //El ios::app se encarga de que se guarde todos las transacciones
+        cout << "Enter the account number: ";               //en el archivo
         cin >> AccNumber;
         cout << "Enter the amount of money you want to transfer: ";
         cin >> money;
 
         if (money <= AccMoney && money > 0) {
-            cout << "Transfer successful\n" << '\a';
+            cout << "Transfer successful\n" << '\a';        //Aqui guardamos la info en el archivo
             transfers << "You transferred $" << money << " to account number: " << AccNumber << " on " << dateTime << endl;
             transfers.close();
             AccMoney -= money;
@@ -72,6 +78,7 @@ int EnviarDinero(int& AccNumber, double& money, double& AccMoney) {
     return AccMoney;
 }
 
+//Esta funcion realiza un loop para imprimir la lista de transacciones del archivo
 void AccStatement() {
     ifstream statement("transactions.txt");
     string line;
@@ -83,6 +90,9 @@ void AccStatement() {
     statement.close();
 }
 
+
+//Esta funcion se encarga de cambiar las credenciales de el user y las almacena en un archivo (simulando una base de datos)
+//para que luego las podamos leer para iniciar session
 void cambiarCredenciales(string& Username, string& password) {
     string currentUsername, currentPassword, newUsername, newPassword;
 
@@ -101,7 +111,7 @@ void cambiarCredenciales(string& Username, string& password) {
 
         ofstream NewUser("Username.txt");
         NewUser << newUsername;
-
+                                    //Aqui es donde se crean los archivos
         ofstream NewPass("Password.txt");
         NewPass << newPassword;
 
@@ -119,7 +129,7 @@ void cambiarCredenciales(string& Username, string& password) {
 
 int main() {
 
-
+    //Definimos las variables
     string Username, password, defPass = "Password", defUser = "User12";
     int opt = 0, AccNumber;
     double AccMoney = 188.78, money;
@@ -128,7 +138,7 @@ int main() {
 
 
     string Pass;
-    ifstream PasswordFile("Password.txt");
+    ifstream PasswordFile("Password.txt"); //Este loop lee el file de password para buscar la contraseña
  while (getline(PasswordFile, Pass)){
 
     defPass = Pass;
@@ -137,7 +147,7 @@ int main() {
 
 
     string User;
-    ifstream UserFile("Username.txt");
+    ifstream UserFile("Username.txt"); //Este loop lee el file de user para buscar el user
  while (getline(UserFile, User)){
 
     defUser = User;
@@ -154,6 +164,8 @@ int main() {
     cin >> password;
     system("cls");
 
+
+    //Este loop se encarga de repetir el proceso de login si entran algun credencial mal
     while (Username != defUser || password != defPass) {
         system("cls");
         cout << "Username or Password Incorrect\nPlease Try Again" << endl;
@@ -167,6 +179,7 @@ int main() {
 
     do {
         
+        //Aqui se imprime el menu
         cout << "Welcome " << Username << "!\n";
         cout << "Select An Option\n";
         cout << "1-View Account Balance\n";
@@ -174,9 +187,13 @@ int main() {
         cout << "3-Transfer Money\n";
         cout << "4-View Transfer Statements\n";
         cout << "5-Change Username and Password\n";
-        cout << "6-Exit\n";
+        cout << "6-Add New Account\n";
+        cout << "7-List of Accounts\n";
+        cout << "8-Exit\n";
         cin >> opt;
 
+
+        //Y utilizamos un switch case para llamar a las debidas funciones
         switch (opt) {
         case 1:
             system("cls");
