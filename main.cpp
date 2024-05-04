@@ -130,7 +130,7 @@ void cambiarCredenciales(string& Username, string& password) {
 int main() {
 
     //Definimos las variables
-    string Username, password, defPass = "Password", defUser = "User12";
+    string Username, password, defPass = "Password", defUser = "Juancho";
     int opt = 0, AccNumber;
     double AccMoney = 188.78, money;
     
