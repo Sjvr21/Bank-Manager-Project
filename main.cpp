@@ -2,25 +2,59 @@
 #include <fstream>
 #include <ctime>
 #include <string>
+#include <windows.h>
+#include <vector>
 
 using namespace std;
 
+struct Account {
+    int accountNumber;
+    string holderName;
+    double balance;
+};
 
-int EnviarDinero(int& AccNumber, double& money, double& AccMoney) {     //Funcion que se encarga de enviar el dinero
+vector<Account> accounts;
+
+void addAccount() {
+    Account newAccount;
+    cout << "Enter ner account number: ";
+    cin >> newAccount.accountNumber;
+    cout << "Enter holder's name: ";
+    cin >> newAccount.holderName;
+    cout << "Enter initial balance: ";
+    cin >> newAccount.balance;
+    accounts.push_back(newAccount);
+    cout << "Account successfully added.\n";
+    
+}
+
+void listAccounts() {
+    cout << "List of All Accounts:\n";
+    for (const auto& account : accounts) {
+        cout << "Account Number: " << account.accountNumber
+            << ", Holder: " << account.holderName
+            << ", Balance: $" << account.balance << endl;
+    }
+
+}
+
+
+
+int EnviarDinero(int& AccNumber, double& money, double& AccMoney) {
     char opcion = 'y';
     do {
-       const time_t tiempo = time(0);
-                            //Con esto obtenemos el tiempo del sistema operativo
-        char* dateTime = ctime(&tiempo);
+        time_t now = time(0);
+   
+        char* dateTime = ctime(&now);
 
-        ofstream transfers("transactions.txt", ios::app);   //Creamos un file de transacciones
+        ofstream transfers("transactions.txt", ios::app);
         cout << "Enter the account number: ";
         cin >> AccNumber;
         cout << "Enter the amount of money you want to transfer: ";
         cin >> money;
 
-        if (money <= AccMoney && money > 0) {           //Una ves se realice la transaccion se guarda en el file la misma
-            cout << "Transfer successful\n" << '\a';    //Con la fecha del dia 
+        if (money <= AccMoney && money > 0) {
+            cout << "Transfer successful\n" << '\a';
             transfers << "You transferred $" << money << " to account number: " << AccNumber << " on " << dateTime << endl;
             transfers.close();
             AccMoney -= money;
@@ -29,7 +63,7 @@ int EnviarDinero(int& AccNumber, double& money, double& AccMoney) {     //Funcio
             cout << "Your account doesn't have that money\n";
         }
 
-        cout << "Do you want to make another transfer? (y/n): ";
+        cout << "Do you want to make another transaction? (y/n): ";
         cin >> opcion;
         system("cls");
 
@@ -38,18 +72,17 @@ int EnviarDinero(int& AccNumber, double& money, double& AccMoney) {     //Funcio
     return AccMoney;
 }
 
-void AccStatement() {       //Esta funcion se encarga de ver el estado de cuenta del usuario
+void AccStatement() {
     ifstream statement("transactions.txt");
     string line;
 
-    cout << "Account Statements: \n";   
-    while (getline(statement, line)) {  //El loop ira linea por linea imprimiendo todo lo que haya en el archivo
+    cout << "Account Statements: \n";
+    while (getline(statement, line)) {
         cout << line << endl;
     }
     statement.close();
 }
 
-//Esta funcion se encarga de crear nuevas credenciales y guardar la contraseña y el username en un file 
 void cambiarCredenciales(string& Username, string& password) {
     string currentUsername, currentPassword, newUsername, newPassword;
 
@@ -62,13 +95,13 @@ void cambiarCredenciales(string& Username, string& password) {
 
     if (currentUsername == Username && currentPassword == password) {
         cout << "Enter your new username: ";
-        cin >> newUsername;                     //Le pide que entre las credenciales viejas
+        cin >> newUsername;
         cout << "Enter your new password: ";
         cin >> newPassword;
 
         ofstream NewUser("Username.txt");
         NewUser << newUsername;
-                                //Guarda las contraseña y nombre en su respectivo archivo
+
         ofstream NewPass("Password.txt");
         NewPass << newPassword;
 
@@ -86,10 +119,10 @@ void cambiarCredenciales(string& Username, string& password) {
 
 int main() {
 
-    //Aqui declaramos varias variables que necesitaremos para el codigo
+
     string Username, password, defPass = "Password", defUser = "User12";
     int opt = 0, AccNumber;
-    double AccMoney = 188.78, money;//Le ponemos una cantidad de dinero random
+    double AccMoney = 188.78, money;
     
     
 
@@ -98,7 +131,7 @@ int main() {
     ifstream PasswordFile("Password.txt");
  while (getline(PasswordFile, Pass)){
 
-    defPass = Pass;         //Aqui se enviara a los archivos el nombre y contraseña y los guardara 
+    defPass = Pass;
   }
   PasswordFile.close();
 
@@ -112,7 +145,6 @@ int main() {
   UserFile.close();
 
 
-    //Le pedimos al usuario que entre sus credenciales
     
     cout << "Welcome to the Central Bank Account Software" << endl;
     cout << "Enter your Username: ";
@@ -120,8 +152,8 @@ int main() {
 
     cout << "Enter your password: ";
     cin >> password;
+    system("cls");
 
-    //Si las credenciales no son correctas no se terminara el loop
     while (Username != defUser || password != defPass) {
         system("cls");
         cout << "Username or Password Incorrect\nPlease Try Again" << endl;
@@ -129,11 +161,12 @@ int main() {
         cin >> Username;
         cout << "Enter your password: ";
         cin >> password;
+        system("cls");
 
     }
 
     do {
-        //Menu de opciones
+        
         cout << "Welcome " << Username << "!\n";
         cout << "Select An Option\n";
         cout << "1-View Account Balance\n";
@@ -145,7 +178,6 @@ int main() {
         cin >> opt;
 
         switch (opt) {
-            //Y en cada case llamamos a su debida funcion
         case 1:
             system("cls");
             cout << "############################\n";
@@ -175,6 +207,12 @@ int main() {
 
             break;
         case 6:
+            addAccount();
+            break;
+        case 7:
+            listAccounts();
+            break;
+        case 8:
             system("cls");
             cout << "Exiting...";
             break;
@@ -183,7 +221,8 @@ int main() {
             cout << "Invalid option, please try again.\n";
             break;
         }
-    } while (opt != 6);  
+    } while (opt != 8);  
     
+
     return 0;
 }
