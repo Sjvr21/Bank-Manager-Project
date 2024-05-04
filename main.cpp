@@ -20,7 +20,7 @@ void addAccount() {
 
    
     Account newAccount;
-    cout << "Enter ner account number: ";
+    cout << "Enter new account number: ";
     cin >> newAccount.accountNumber;
     cout << "Enter holder's name: ";
     cin >> newAccount.holderName;
